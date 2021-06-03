@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 
 people = ['rahul', 'meghana', 'nevil','shujan', 'mustafa', 'manu']      # people who's face will be detected
-DIR = r'/home/manu/Documents/IoT_Project/assets/train'
+DIR = r'/home/manu/Documents/IoT_Project/assets/train'      #location varies
 
 haar_cascade = cv.CascadeClassifier('haar_face.xml')        #face detection xml file
 
