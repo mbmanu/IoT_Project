@@ -1,43 +1,35 @@
-import os           #importing modules
-import cv2 as cv
+import cv2
 import numpy as np
+from PIL import Image
+import os
 
-people = ['rahul', 'meghana', 'nevil','shujan', 'mustafa', 'manu']      # people who's face will be detected
-DIR = r'/home/manu/Documents/IoT_Project/assets/train'      #location varies
+# Path for face image database
+path = 'dataset'
 
-haar_cascade = cv.CascadeClassifier('haar_face.xml')        #face detection xml file
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+detector = cv2.CascadeClassifier("haar_face.xml")
 
-features = []
-labels = []
+# function to get the images and label data
+def getImagesAndLabels(path):
+    imagePaths = [os.path.join(path,f) for f in os.listdir(path)]     
+    faceSamples=[]
+    ids = []
+    for imagePath in imagePaths:
+        PIL_img = Image.open(imagePath).convert('L') # convert it to grayscale
+        img_numpy = np.array(PIL_img,'uint8')
+        id = int(os.path.split(imagePath)[-1].split(".")[1])
+        faces = detector.detectMultiScale(img_numpy)
+        for (x,y,w,h) in faces:
+            faceSamples.append(img_numpy[y:y+h,x:x+w])
+            ids.append(id)
+    return faceSamples,ids
 
-def train_model():      #training function
-    for i in people:
-        path = os.path.join(DIR, i)
-        label = people.index(i)
+print ("\n [INFO] Training faces. It will take a few seconds. Wait ...")
+faces,ids = getImagesAndLabels(path)
+recognizer.train(faces, np.array(ids))
 
-        for j in os.listdir(path):
-            imgPath = os.path.join(path,j)
+# Save the model into trainer/trainer.yml
+recognizer.write('trainer/trainer.yml') # recognizer.save() worked on Mac, but not on Pi
 
-            img_array = cv.imread(imgPath)
-            if img_array is None:
-                continue
-
-            gray = cv.cvtColor(img_array, cv.COLOR_BGR2GRAY)        #BGR to gray colour conversion
-
-            faces = haar_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4)    #face detection
-
-            for (x,y,w,h) in faces:
-                faces_roi = gray[y:y+h, x:x+w]
-                features.append(faces_roi)
-                labels.append(label)
-
-train_model()           #function call
-print('Training complete!')
-
-features = np.array(features, dtype='object')
-labels = np.array(labels)
-
-face_recognizer = cv.face.LBPHFaceRecognizer_create()
-
-face_recognizer.train(features, labels)
-face_recognizer.save('trained.yml')         #saving the trained model
+# Print the numer of faces trained and end program
+print("\n [INFO] {0} faces trained. Exiting Program".format(len(np.unique(ids))))
