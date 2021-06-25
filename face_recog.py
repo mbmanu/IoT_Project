@@ -5,7 +5,7 @@ import datetime
 import requests
 data = {}
 temp = None
-url = 'https://6b662ece687a.ngrok.io/v0/nodelog'
+url = '<api URL>'
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('trainer/trainer.yml')
