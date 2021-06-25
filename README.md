@@ -82,3 +82,5 @@ The REST API Methods to the above app is described below.
 ``` 
     curl http://localhost:8080/v0/getlog
 ```
+## Contributions
+Feel free to contribute. You know the drill fork and request a PR ;)
