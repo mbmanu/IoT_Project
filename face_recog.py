@@ -5,7 +5,7 @@ import datetime
 import requests
 data = {}
 temp = None
-url = '<api URL>'
+url = '<API_URL>'
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('trainer/trainer.yml')
