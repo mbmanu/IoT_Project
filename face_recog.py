@@ -5,7 +5,7 @@ import datetime
 import requests
 data = {}
 temp = None
-url = '<API_URL>'
+#url = '<API_URL>'
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('trainer/trainer.yml')
@@ -52,14 +52,14 @@ while True:
         cv2.putText(img, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1) 
 
 
-        if temp != str(id):
-            temp = str(id)
-            data['relname'] = str(id)
-            data['ipaddr'] = requests.get('https://api.ipify.org/').text
-            data['datetime'] = str(datetime.datetime.now())[0:19]
-            x = requests.post(url = url , json = data)
-            print(x.text)
-            temp = str(id)
+        # if temp != str(id):
+        #     temp = str(id)
+        #     data['relname'] = str(id)
+        #     data['ipaddr'] = requests.get('https://api.ipify.org/').text
+        #     data['datetime'] = str(datetime.datetime.now())[0:19]
+        #     x = requests.post(url = url , json = data)
+        #     print(x.text)
+          #  temp = str(id)
 
     
     cv2.imshow('camera',img) 
